@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palak | 26th March</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600&family=Playfair+Display:ital,wght@1,600&family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, #ffafbd, #ffc3a0);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Background Light Effects */
+        .bubble {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: move 15s infinite alternate ease-in-out;
+            z-index: 1;
+        }
+
+        @keyframes move { from { transform: translate(0, 0); } to { transform: translate(100px, 100px); } }
+
+        /* FIRST PAGE STYLE */
+        #page1 {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            width: 350px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: 0.8s ease-in-out;
+        }
+
+        /* SECOND PAGE STYLE (Hidden by default) */
+        #page2 {
+            position: absolute;
+            z-index: 20;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8);
+            transition: 0.8s ease-in-out;
+            width: 100%;
+        }
+
+        .date-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; color: #fff; margin: 0; }
+        
+        .pfp {
+            width: 160px; height: 160px; border-radius: 50%; margin: 30px auto;
+            border: 4px solid rgba(255, 255, 255, 0.8); object-fit: cover; display: block;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .timer-row { display: flex; justify-content: space-between; margin: 20px 0; color: white; }
+        .val { font-size: 1.5rem; font-weight: 600; display: block; }
+        .lab { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; opacity: 0.8; }
+
+        .next-btn {
+            background: #fff; color: #ffafbd; border: none; padding: 12px 35px;
+            border-radius: 25px; font-weight: 600; cursor: pointer; font-size: 1rem;
+            transition: 0.3s; margin-top: 20px;
+        }
+
+        .next-btn:hover { background: #ff4d6d; color: #fff; transform: scale(1.1); }
+
+        /* Surprise Message Style */
+        .big-text {
+            font-family: 'Pacifico', cursive;
+            font-size: 4rem;
+            color: white;
+            text-shadow: 4px 4px 10px rgba(0,0,0,0.1);
+            margin: 0;
+        }
+
+        .cute-p { font-size: 1.5rem; color: #fff; font-weight: 200; letter-spacing: 2px; }
+
+        audio { width: 300px; height: 30px; filter: invert(1) brightness(2); opacity: 0.6; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="bubble" style="width: 200px; height: 200px; top: 10%; left: 5%;"></div>
+    <div class="bubble" style="width: 300px; height: 300px; bottom: 10%; right: 5%;"></div>
+
+    <div id="page1">
+        <p style="font-size: 0.7rem; color: #fff; letter-spacing: 4px; margin-bottom: 10px;">A SPECIAL SOUL</p>
+        <h1 class="date-title">March 26th</h1>
+        <img src="bear.png.jpeg" alt="Palak" class="pfp">
+        
+        <div class="timer-row">
+            <div class="timer-unit"><span class="val" id="d">00</span><span class="lab">Days</span></div>
+            <div class="timer-unit"><span class="val" id="h">00</span><span class="lab">Hrs</span></div>
+            <div class="timer-unit"><span class="val" id="m">00</span><span class="lab">Min</span></div>
+            <div class="timer-unit"><span class="val" id="s">00</span><span class="lab">Sec</span></div>
+        </div>
+
+        <button class="next-btn" onclick="nextPage()">Next →</button>
+    </div>
+
+    <div id="page2">
+        <h1 class="big-text">Birthday Coming Soon Cutiee! 🎂</h1>
+        <p class="cute-p">Get ready for the best day ever ✨</p>
+        <img src="bear.png.jpeg" alt="Palak" style="width: 120px; border-radius: 20px; border: 5px solid white;">
+        <br>
+        <audio controls id="mySong" autoplay>
+            <source src="song.mp3,mpeg.mpeg" type="audio/mpeg">
+        </audio>
+        <br>
+        <button class="next-btn" onclick="goBack()" style="background: transparent; color: white; border: 1px solid white; font-size: 0.8rem;">← Back</button>
+    </div>
+
+    <script>
+        // Timer Logic
+        const birthday = new Date("March 26, 2026 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const gap = birthday - now;
+            document.getElementById('d').innerText = Math.floor(gap / (1000 * 60 * 60 * 24));
+            document.getElementById('h').innerText = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('m').innerText = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('s').innerText = Math.floor((gap % (1000 * 60)) / 1000);
+        }, 1000);
+
+        // Navigation Logic
+        function nextPage() {
+            // Page 1 ko gayab karo
+            document.getElementById('page1').style.opacity = '0';
+            document.getElementById('page1').style.visibility = 'hidden';
+            document.getElementById('page1').style.transform = 'translateX(-100px)';
+
+            // Page 2 ko dikhao
+            setTimeout(() => {
+                document.getElementById('page2').style.opacity = '1';
+                document.getElementById('page2').style.visibility = 'visible';
+                document.getElementById('page2').style.transform = 'scale(1)';
+                
+                // Confetti blast!
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }, 400);
+        }
+
+        function goBack() {
+            document.getElementById('page2').style.opacity = '0';
+            document.getElementById('page2').style.visibility = 'hidden';
+            document.getElementById('page2').style.transform = 'scale(0.8)';
+
+            setTimeout(() => {
+                document.getElementById('page1').style.opacity = '1';
+                document.getElementById('page1').style.visibility = 'visible';
+                document.getElementById('page1').style.transform = 'translateX(0)';
+            }, 400);
+        }
+    </script>
+</body>
+</html>
